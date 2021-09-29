@@ -10,6 +10,17 @@ client = pytumblr.TumblrRestClient(
   'Ti31RBWd0F0O1YWeO1D1S48WdmyQiPKMl2Z4TPVJ4JVdM91Gi6'
 )
 
+special_days = {
+    "Thu20": "thursday the 20th",        
+    "Oct19": "none pizza with left beef",
+    "Nov5":  "november 5th",              
+    "Apr13": "neil banging out the tunes",
+    "Mar15": "ides of march",
+    "Apr24": "josh fight",
+    "Jul17": "hershey",
+    "Jul12": "dashcon"
+    }
+
 day_names ={
     "Mon":"monday",
     "Tue":"tuesday",
@@ -21,19 +32,31 @@ day_names ={
     }
 
 random.seed()
-while(True):
+#while(True):
+if(True):
 
     # check if its a new day yet
+    possiblePosts = {}
     day = time.asctime(time.localtime())
+    #day = "Thu Mar 15 131231231"
     file = open("lastPost.txt","r+")
     if(day[0:3] != file.read()[0:3]):
     #if(True):
-        
+        #if(True):
 
         try:
-            # search through posts tagged with the current day
-            possiblePosts = client.posts("weekdayholidaybot", tag = day_names[day[0:3]])["posts"]
 
+            # look up if it's a special non-weekly holiday
+            for i in special_days:
+                if(i[0:3] in day[0:10] and i[4:5] in day[0:10]):
+                   possiblePosts = client.posts("weekdayholidaybot", tag = special_days[i])["posts"]
+                   print("SPECIAL DAY! - " + special_days[i].upper())
+
+            # search through posts tagged with the current weekday
+            if(len(possiblePosts) == 0):
+                possiblePosts = client.posts("weekdayholidaybot", tag = day_names[day[0:3]])["posts"]
+            #print(possiblePosts)
+            
             # randomly pick one
             post = random.sample(possiblePosts, 1)[0]
 
@@ -55,8 +78,10 @@ while(True):
         
     else:
         print("not yet. - " + time.asctime(time.localtime()))
+
+    time.sleep(3)
         
     # wait eight hours
-    time.sleep(28800)
+    # time.sleep(28800)
         
     
