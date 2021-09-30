@@ -1,0 +1,1 @@
+the bot needs this text file in the same folder. it's gonna overwrite the text with the last time it posted so it doesn't accidentally post twice on the same day.
